@@ -2,6 +2,7 @@ import "package:bodymasscalculator/constants/app_constants.dart";
 import "package:bodymasscalculator/widgets/left_bar.dart";
 import "package:bodymasscalculator/widgets/right_bar.dart";
 import "package:flutter/material.dart";
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -32,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   width: 130,
@@ -47,9 +49,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: InputBorder.none,
                         hintText: "Height",
                         hintStyle: TextStyle(
-                          fontSize: 42,
+                          fontSize: 32,
                           fontWeight: FontWeight.w300,
-                          color: Colors.white.withOpacity(0.8)
+                          color: accentHexColor.withOpacity(0.8)
                         )
                       ),
                     )
@@ -69,38 +71,35 @@ class _HomeScreenState extends State<HomeScreen> {
                         border: InputBorder.none,
                         hintText: "Weight",
                         hintStyle: TextStyle(
-                            fontSize: 42,
+                            fontSize: 32,
                             fontWeight: FontWeight.w300,
-                            color: Colors.white.withOpacity(0.8)
+                            color: accentHexColor.withOpacity(0.8)
                         )
                     ),
+                  ),
+                ),
+                ElevatedButton(
+                    style: ElevatedButton.styleFrom(textStyle: const TextStyle(fontSize: 20), primary: accentHexColor),
+                    onPressed: () {
+                      double _h = double.parse(_heightController.text);
+                      double _w = double.parse(_weightController.text);
+                      setState(() {
+                        _bmiResult = _w / (_h * _h);
+                        if(_bmiResult > 25){
+                          _textResult = "You're over weight";
+                        }else if(_bmiResult >= 18.5 && _bmiResult <= 25){
+                          _textResult = "You have normal weight";
+                        }else{
+                          _textResult = "You're under weight";
+                        }
+                      });
+                    },
+                    child: Text("Calculate", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: mainHexColor),
                   )
-                  ,
-                )
+                ),
               ],
             ),
             const SizedBox(height: 30),
-            GestureDetector(
-              onTap: (){
-                double _h = double.parse(_heightController.text);
-                double _w = double.parse(_weightController.text);
-                setState(() {
-                  _bmiResult = _w / (_h * _h);
-                  if(_bmiResult > 25){
-                    _textResult = "You're over weight";
-                  }else if(_bmiResult >= 18.5 && _bmiResult <= 25){
-                    _textResult = "You have normal weight";
-                  }else{
-                    _textResult = "You're under weight";
-                  }
-                });
-              },
-              child: Container(
-                  child: Text("Calculate", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: accentHexColor),)
-              ),
-            ),
-
-            const SizedBox(height: 50),
             Container(
               child: Text(_bmiResult.toStringAsFixed(2), style: TextStyle(fontSize: 90, color: accentHexColor),),
             ),
@@ -108,13 +107,15 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Text(_textResult, style: TextStyle(fontSize: 32, fontWeight: FontWeight.w400, color: accentHexColor),
               ),)
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 30),
+            Lottie.asset('assets/lottie/Exercise.json',
+              width: 280,
+              fit: BoxFit.fill,),
             const LeftBar(barWidth: 40),
             const SizedBox(height: 20),
             const LeftBar(barWidth: 70),
             const SizedBox(height: 20),
             const LeftBar(barWidth: 40),
-            const SizedBox(height: 20),
             const RightBar(barWidth: 70),
             const SizedBox(height: 20),
             const RightBar(barWidth: 90),
